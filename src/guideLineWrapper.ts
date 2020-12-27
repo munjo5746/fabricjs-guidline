@@ -58,7 +58,13 @@ export const attatchGuidelineHandlers = (canvas: fabric.Canvas) => {
         points = [left, leftTop, left, leftBottom];
       } else {
         // right
-        console.log("right");
+        const right = existing.right;
+        const rightTop = Math.min(existing.top, target.top!);
+        const rightBottom = Math.max(
+          existing.bottom,
+          target.top! + target.height!
+        );
+        points = [right, rightTop, right, rightBottom];
       }
 
       const line = new fabric.Line(points, {
