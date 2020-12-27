@@ -1,6 +1,8 @@
 import { fabric } from "fabric";
 
 const BOUNDARY_THRESHHOLD = 2;
+const LINE_WIDTH = 3;
+const LINE_COLOR = "red";
 const loc: {
   [id: string]: {
     left: number;
@@ -43,29 +45,28 @@ export const attatchGuidelineHandlers = (canvas: fabric.Canvas) => {
       const existing = loc[verticalAlignedId];
       if (!!guideLine) return;
 
-      // find left or right
+      // find left or right and draw line with correct points
+      let points: number[] = [];
       if (Math.abs(existing.left! - target!.left!) < BOUNDARY_THRESHHOLD) {
         // left
-        console.log("left");
+        const left = existing.left;
+        const leftTop = Math.min(existing.top, target.top!);
+        const leftBottom = Math.max(
+          existing.bottom,
+          target.top! + target.height!
+        );
+        points = [left, leftTop, left, leftBottom];
       } else {
         // right
         console.log("right");
       }
 
-      const line = new fabric.Line(
-        [
-          existing!.left! - 3,
-          existing!.top! - 10,
-          target!.left! - 3,
-          target!.top! + target!.height! + 10
-        ],
-        {
-          stroke: "red",
-          strokeWidth: 3,
-          fill: "red",
-          selectable: false
-        }
-      );
+      const line = new fabric.Line(points, {
+        stroke: LINE_COLOR,
+        strokeWidth: LINE_WIDTH,
+        fill: LINE_COLOR,
+        selectable: false
+      });
       guideLine = line;
 
       canvas.add(line);
